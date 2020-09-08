@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -40,6 +41,10 @@ public class Team {
         ITextComponent textComponent = new TranslationTextComponent("bongo.team." + color.getName());
         textComponent.setStyle(textComponent.getStyle().setColor(Util.getTextFormatting(color)));
         return textComponent;
+    }
+
+    public TextFormatting getFormatting() {
+        return Util.getTextFormatting(color);
     }
 
     public boolean completed (int slot) {

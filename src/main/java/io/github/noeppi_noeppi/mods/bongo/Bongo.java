@@ -50,8 +50,9 @@ public class Bongo extends WorldSavedData {
         clientInstance = bongo;
         if (mc == null)
             mc = Minecraft.getInstance();
-        if ((bongoMessageType == BongoMessageType.START || bongoMessageType == BongoMessageType.STOP) && mc.world != null)
+        if ((bongoMessageType == BongoMessageType.START || bongoMessageType == BongoMessageType.STOP) && mc.world != null) {
             MinecraftForge.EVENT_BUS.post(new RecipesUpdatedEvent(mc.world.getRecipeManager()));
+        }
     }
 
     private ServerWorld world;
