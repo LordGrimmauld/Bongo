@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.mods.bongo.task;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import io.github.noeppi_noeppi.mods.bongo.render.DummyGui;
 import io.github.noeppi_noeppi.mods.bongo.render.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
@@ -36,7 +37,7 @@ public class TaskTypeItem implements TaskType<ItemStack> {
 
     @Override
     public void renderSlot(Minecraft mc, MatrixStack matrixStack, IRenderTypeBuffer buffer) {
-//        AbstractGui.blit(matrixStack, 0, 0, 0, 0, 18, 18, 256, 256);
+        DummyGui.blit(matrixStack, 0, 0, 0, 0, 18, 18, 256, 256);
     }
 
     @Override

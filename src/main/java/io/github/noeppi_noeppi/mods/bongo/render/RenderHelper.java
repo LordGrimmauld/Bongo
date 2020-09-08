@@ -5,8 +5,9 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.noeppi_noeppi.mods.bongo.BongoMod;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.TransformationMatrix;
+import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -65,7 +66,6 @@ public class RenderHelper {
     }
 
     public static void renderText(String text, MatrixStack matrixStack, IRenderTypeBuffer buffer) {
-        /*
         float widthHalf = Minecraft.getInstance().fontRenderer.getStringWidth(text) / 2f;
         float heightHalf = Minecraft.getInstance().fontRenderer.FONT_HEIGHT / 2f;
 
@@ -77,15 +77,19 @@ public class RenderHelper {
         GlStateManager.color4f(0.2f, 0.2f, 0.2f, 0.8f);
         Minecraft.getInstance().getTextureManager().bindTexture(WHITE_TEXTURE);
 
-        AbstractGui.blit(matrixStack, 0, 0, 0, 0, (int) (2 * widthHalf) + 4, (int) (2 * heightHalf) + 4, 256, 256);
+        DummyGui.blit(matrixStack, 0, 0, 0, 0, (int) (2 * widthHalf) + 4, (int) (2 * heightHalf) + 4, 256, 256);
 
         //noinspection deprecation
         GlStateManager.color4f(1, 1, 1, 1);
         RenderSystem.disableBlend();
         matrixStack.translate(widthHalf + 2, heightHalf + 2, 10);
 
-        Minecraft.getInstance().fontRenderer.drawString(matrixStack, text, -widthHalf, -heightHalf, 0xFFFFFF);
+        Vector4f vector4f = new Vector4f(-widthHalf, -heightHalf, 0, 1.0F);
+        vector4f.transform(matrixStack.getLast().getMatrix());
+        RenderSystem.enableAlphaTest();
+
+        Minecraft.getInstance().fontRenderer.renderString(text, -widthHalf, -heightHalf, 0xFFFFFF, matrixStack.getLast().getMatrix(), false);
+
         matrixStack.pop();
-         */
     }
 }

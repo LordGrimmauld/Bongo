@@ -2,6 +2,7 @@ package io.github.noeppi_noeppi.mods.bongo.task;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import io.github.noeppi_noeppi.mods.bongo.network.BongoNetwork;
+import io.github.noeppi_noeppi.mods.bongo.render.DummyGui;
 import io.github.noeppi_noeppi.mods.bongo.render.RenderHelper;
 import io.github.noeppi_noeppi.mods.bongo.util.ClientAdvancementInfo;
 import net.minecraft.advancements.Advancement;
@@ -47,7 +48,7 @@ public class TaskTypeAdvancement implements TaskType<ResourceLocation> {
     public void renderSlot(Minecraft mc, MatrixStack matrixStack, IRenderTypeBuffer buffer) {
         matrixStack.translate(-1, -1, 0);
         matrixStack.scale(20 / 26f, 20 / 26f, 1);
-//        AbstractGui.blit(matrixStack, 0, 0, 0, 18, 26, 26, 256, 256);
+        DummyGui.blit(matrixStack, 0, 0, 0, 18, 26, 26, 256, 256);
     }
 
     @Override
