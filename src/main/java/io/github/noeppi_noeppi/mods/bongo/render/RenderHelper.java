@@ -65,6 +65,7 @@ public class RenderHelper {
     }
 
     public static void renderText(String text, MatrixStack matrixStack, IRenderTypeBuffer buffer) {
+        /*
         float widthHalf = Minecraft.getInstance().fontRenderer.getStringWidth(text) / 2f;
         float heightHalf = Minecraft.getInstance().fontRenderer.FONT_HEIGHT / 2f;
 
@@ -85,5 +86,6 @@ public class RenderHelper {
 
         Minecraft.getInstance().fontRenderer.drawString(matrixStack, text, -widthHalf, -heightHalf, 0xFFFFFF);
         matrixStack.pop();
+         */
     }
 }

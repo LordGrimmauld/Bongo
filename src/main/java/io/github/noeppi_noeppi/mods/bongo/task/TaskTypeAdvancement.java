@@ -47,7 +47,7 @@ public class TaskTypeAdvancement implements TaskType<ResourceLocation> {
     public void renderSlot(Minecraft mc, MatrixStack matrixStack, IRenderTypeBuffer buffer) {
         matrixStack.translate(-1, -1, 0);
         matrixStack.scale(20 / 26f, 20 / 26f, 1);
-        AbstractGui.blit(matrixStack, 0, 0, 0, 18, 26, 26, 256, 256);
+//        AbstractGui.blit(matrixStack, 0, 0, 0, 18, 26, 26, 256, 256);
     }
 
     @Override

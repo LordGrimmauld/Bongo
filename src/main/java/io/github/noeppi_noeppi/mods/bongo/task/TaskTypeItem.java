@@ -36,7 +36,7 @@ public class TaskTypeItem implements TaskType<ItemStack> {
 
     @Override
     public void renderSlot(Minecraft mc, MatrixStack matrixStack, IRenderTypeBuffer buffer) {
-        AbstractGui.blit(matrixStack, 0, 0, 0, 0, 18, 18, 256, 256);
+//        AbstractGui.blit(matrixStack, 0, 0, 0, 0, 18, 18, 256, 256);
     }
 
     @Override

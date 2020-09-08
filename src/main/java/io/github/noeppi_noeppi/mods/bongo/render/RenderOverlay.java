@@ -1,22 +1,18 @@
 package io.github.noeppi_noeppi.mods.bongo.render;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.noeppi_noeppi.mods.bongo.Bongo;
 import io.github.noeppi_noeppi.mods.bongo.BongoMod;
 import io.github.noeppi_noeppi.mods.bongo.Keybinds;
 import io.github.noeppi_noeppi.mods.bongo.config.ClientConfig;
 import io.github.noeppi_noeppi.mods.bongo.data.Team;
-import io.github.noeppi_noeppi.mods.bongo.task.Task;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.item.DyeColor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RenderOverlay {
@@ -28,7 +24,36 @@ public class RenderOverlay {
 
     @SubscribeEvent
     public void renderOverlay(RenderGameOverlayEvent.Post event) {
-        MatrixStack matrixStack = event.getMatrixStack();
+        int height = event.getWindow().getScaledHeight();
+        int width = event.getWindow().getWidth();
+        Minecraft mc = Minecraft.getInstance();
+
+
+        if (mc.world != null && mc.player != null && mc.currentScreen == null && !mc.gameSettings.showDebugInfo && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
+            Bongo bongo = Bongo.get(mc.world);
+            float padding = 5;
+            float px = height / 3.5F;
+            float x = padding;
+            float y = padding;
+            Team team = bongo.getTeam(mc.player);
+            float scale = 1;
+            if (bongo.active()) {
+                boolean itemNames = false;
+                if (Keybinds.BIG_OVERLAY.isKeyDown()) {
+                    px = Math.min(mc.getMainWindow().getScaledWidth() - (2 * padding), mc.getMainWindow().getScaledHeight() - (6 * padding));
+                    x = (mc.getMainWindow().getScaledWidth() - px) / 2;
+                    y = ((mc.getMainWindow().getScaledHeight() - px) / 2) - (2 * padding);
+                    itemNames = true;
+                } else {
+                    scale *= ClientConfig.bongoMapScaleFactor.get();
+                }
+                scale *= px/138F;
+                mc.textureManager.bindTexture(BINGO_TEXTURE);
+                AbstractGui.blit((int) x, (int) y, 0, 0, 0, (int) (138*scale), (int) (138*scale), (int) (256*scale), (int) (256*scale));
+            }
+        }
+
+       /* MatrixStack matrixStack = event.getMatrixStack();
         IRenderTypeBuffer buffer = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
         Minecraft mc = Minecraft.getInstance();
         if (mc.world != null && mc.player != null && mc.currentScreen == null && !mc.gameSettings.showDebugInfo && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
@@ -154,10 +179,11 @@ public class RenderOverlay {
 
                 matrixStack.pop();
             }
-        }
+        } */
     }
 
     public void renderCompleted(MatrixStack matrixStack, IRenderTypeBuffer buffer, List<Integer> colorCodes) {
+        /*
         if (colorCodes.isEmpty())
             return;
         int[][] rects;
@@ -194,6 +220,7 @@ public class RenderOverlay {
             GlStateManager.color4f(1, 1, 1, 1);
         }
         matrixStack.pop();
+         */
     }
 
     private static final int[][] RECTS_1 = new int[][]{
