@@ -1,16 +1,19 @@
 package io.github.noeppi_noeppi.mods.bongo;
 
+import io.github.noeppi_noeppi.mods.bongo.command.BongoCommands;
 import io.github.noeppi_noeppi.mods.bongo.data.GameDef;
 import io.github.noeppi_noeppi.mods.bongo.network.BongoNetwork;
 import io.github.noeppi_noeppi.mods.bongo.task.Task;
 import io.github.noeppi_noeppi.mods.bongo.task.TaskTypeAdvancement;
 import io.github.noeppi_noeppi.mods.bongo.task.TaskTypeItem;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.resources.ReloadListener;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.profiler.IProfiler;
+import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -18,18 +21,21 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AdvancementEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
 
 public class EventListener {
+
+    private static Minecraft mc = null;
 
     @SubscribeEvent
     public void playerJoin(PlayerEvent.PlayerLoggedInEvent event) {
@@ -72,24 +78,28 @@ public class EventListener {
         }
     }
 
-    @SubscribeEvent
-    public void resourcesReload(AddReloadListenerEvent event) {
-        event.addListener(new ReloadListener<Object>() {
-            @Nonnull
-            @Override
-            protected Object prepare(@Nonnull IResourceManager resourceManager, @Nonnull IProfiler profiler) {
-                return new Object();
-            }
-
-            @Override
-            protected void apply(@Nonnull Object unused, @Nonnull IResourceManager resourceManager, @Nonnull IProfiler profiler) {
-                try {
-                    GameDef.loadGameDefs(resourceManager);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+    public static void clientStart(IEventBus modEventBus) {
+        mc = Minecraft.getInstance();
+        IResourceManager resourceManager = mc.getResourceManager();
+        if (resourceManager instanceof IReloadableResourceManager) {
+            IReloadableResourceManager reloadableResourceManager = (IReloadableResourceManager) resourceManager;
+            reloadableResourceManager.addReloadListener(new ReloadListener<Object>() {
+                @Nonnull
+                @Override
+                protected Object prepare(@Nonnull IResourceManager resourceManager, @Nonnull IProfiler profiler) {
+                    return new Object();
                 }
-            }
-        });
+
+                @Override
+                protected void apply(@Nonnull Object unused, @Nonnull IResourceManager resourceManager, @Nonnull IProfiler profiler) {
+                    try {
+                        GameDef.loadGameDefs(resourceManager);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+        }
     }
 
     @SubscribeEvent
@@ -114,5 +124,10 @@ public class EventListener {
             return test != null && stack.isItemEqual(test);
         }))
             event.getToolTip().add(new StringTextComponent(TextFormatting.GOLD + I18n.format("bongo.tooltip.required")));
+    }
+
+    @SubscribeEvent
+    public void serverLoad(FMLServerStartingEvent event) {
+        BongoCommands.register(event.getCommandDispatcher());
     }
 }

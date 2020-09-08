@@ -24,7 +24,7 @@ public class StartCommand implements Command<CommandSource> {
         }
         bongo.start();
 
-        Util.broadcast(player.getEntityWorld(), new TranslationTextComponent("bongo.info").append(player.getDisplayName()).append(new TranslationTextComponent("bongo.cmd.start.done")));
+        Util.broadcast(player.getEntityWorld(), new TranslationTextComponent("bongo.info").appendSibling(player.getDisplayName()).appendSibling(new TranslationTextComponent("bongo.cmd.start.done")));
 
         return 0;
     }

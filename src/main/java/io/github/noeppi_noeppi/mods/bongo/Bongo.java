@@ -16,6 +16,7 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
@@ -36,7 +37,7 @@ public class Bongo extends WorldSavedData {
 
     public static Bongo get(World world) {
         if (!world.isRemote) {
-            DimensionSavedDataManager storage = ((ServerWorld) world).getServer().func_241755_D_().getSavedData();
+            DimensionSavedDataManager storage = ((ServerWorld) world).getServer().getWorld(DimensionType.OVERWORLD).getSavedData();
             Bongo bongo = storage.getOrCreate(Bongo::new, ID);
             bongo.world = (ServerWorld) world;
             return bongo;
@@ -172,7 +173,7 @@ public class Bongo extends WorldSavedData {
         nbt.putLong("runningSince", runningSince);
         nbt.putLong("ranUntil", ranUntil);
         for (DyeColor dc : DyeColor.values()) {
-            nbt.put(dc.getString(), getTeam(dc).serializeNBT());
+            nbt.put(dc.getName(), getTeam(dc).serializeNBT());
         }
 
         ListNBT itemList = new ListNBT();
@@ -191,8 +192,8 @@ public class Bongo extends WorldSavedData {
         runningSince = nbt.getLong("runningSince");
         ranUntil = nbt.getLong("ranUntil");
         for (DyeColor dc : DyeColor.values()) {
-            if (nbt.contains(dc.getString(), Constants.NBT.TAG_COMPOUND)) {
-                getTeam(dc).deserializeNBT(nbt.getCompound(dc.getString()));
+            if (nbt.contains(dc.getName(), Constants.NBT.TAG_COMPOUND)) {
+                getTeam(dc).deserializeNBT(nbt.getCompound(dc.getName()));
             }
         }
         if (nbt.contains("items", Constants.NBT.TAG_LIST)) {

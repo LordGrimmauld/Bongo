@@ -22,7 +22,7 @@ public class StopCommand implements Command<CommandSource> {
         }
         bongo.stop();
 
-        Util.broadcast(player.getEntityWorld(), new TranslationTextComponent("bongo.info").append(player.getDisplayName()).append(new TranslationTextComponent("bongo.cmd.stop.done")));
+        Util.broadcast(player.getEntityWorld(), new TranslationTextComponent("bongo.info").appendSibling(player.getDisplayName()).appendSibling(new TranslationTextComponent("bongo.cmd.stop.done")));
 
         return 0;
     }

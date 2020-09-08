@@ -22,9 +22,9 @@ public class DefaultEffects {
         TaskEffects.registerPlayerEffect((bongo, thePlayer, task) -> {
             Team team = bongo.getTeam(thePlayer);
             if (team != null) {
-                IFormattableTextComponent tc = team.getName().append(new TranslationTextComponent("bongo.task.complete")).append(task.getContentName(thePlayer.getServerWorld().getServer()));
+                ITextComponent tc = team.getName().appendSibling(new TranslationTextComponent("bongo.task.complete")).appendSibling(task.getContentName(thePlayer.getServerWorld().getServer()));
                 thePlayer.getServerWorld().getServer().getPlayerList().getPlayers().forEach(player -> {
-                    player.sendMessage(tc, player.getUniqueID());
+                    player.sendMessage(tc);
                     if (team.hasPlayer(player)) {
                         player.connection.sendPacket(new SPlaySoundEffectPacket(SoundEvents.BLOCK_END_PORTAL_SPAWN, SoundCategory.MASTER, player.getPosX(), player.getPosY(), player.getPosZ(), 0.5f, 1));
                     }
@@ -33,20 +33,21 @@ public class DefaultEffects {
         });
 
         WinEffects.registerWorldEffect((bongo, world, team) -> {
-            IFormattableTextComponent tc = team.getName().append(new TranslationTextComponent("bongo.win"));
-            IFormattableTextComponent tcc = team.getName().append(new TranslationTextComponent("bongo.winplayers"));
+            ITextComponent tc = team.getName().appendSibling(new TranslationTextComponent("bongo.win"));
+            ITextComponent tcc = team.getName().appendSibling(new TranslationTextComponent("bongo.winplayers"));
 
             world.getServer().getPlayerList().getPlayers().forEach(player -> {
                 if (team.hasPlayer(player)) {
-                    tcc.append(new StringTextComponent(" "));
-                    IFormattableTextComponent pname = player.getDisplayName().deepCopy();
-                    pname.setStyle(Style.EMPTY.applyFormatting(TextFormatting.RESET).applyFormatting(TextFormatting.UNDERLINE).setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp @p " + player.getPosX() + " " + player.getPosY() + " " + player.getPosZ())));
-                    tcc.append(pname);
+                    tcc.appendSibling(new StringTextComponent(" "));
+                    ITextComponent pname = player.getDisplayName().deepCopy();
+                    pname.applyTextStyle(TextFormatting.RESET).applyTextStyle(TextFormatting.UNDERLINE);
+                    pname.setStyle(pname.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp @p " + player.getPosX() + " " + player.getPosY() + " " + player.getPosZ())));
+                    tcc.appendSibling(pname);
                 }
             });
 
             world.getServer().getPlayerList().getPlayers().forEach(player -> {
-                player.sendMessage(tcc, player.getUniqueID());
+                player.sendMessage(tcc);
                 player.connection.sendPacket(new STitlePacket(STitlePacket.Type.TITLE, tc, 10, 60, 10));
                 player.connection.sendPacket(new SPlaySoundEffectPacket(SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.MASTER, player.getPosX(), player.getPosY(), player.getPosZ(), 1.2f, 1));
             });

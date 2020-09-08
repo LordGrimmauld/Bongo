@@ -7,7 +7,7 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -36,8 +36,10 @@ public class Team {
         this.backpack = new ItemStackHandler(27);
     }
 
-    public IFormattableTextComponent getName() {
-        return new TranslationTextComponent("bongo.team." + color.getString()).mergeStyle(Util.getTextFormatting(color));
+    public ITextComponent getName() {
+        ITextComponent textComponent = new TranslationTextComponent("bongo.team." + color.getName());
+        textComponent.setStyle(textComponent.getStyle().setColor(Util.getTextFormatting(color)));
+        return textComponent;
     }
 
     public boolean completed (int slot) {

@@ -8,7 +8,7 @@ import io.github.noeppi_noeppi.mods.bongo.Bongo;
 import io.github.noeppi_noeppi.mods.bongo.data.Team;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -29,17 +29,17 @@ public class TeamsCommand implements Command<CommandSource> {
             if (team.getPlayers().isEmpty())
                 continue;
 
-            IFormattableTextComponent tc = new TranslationTextComponent("bongo.cmd.spread.added");
-            tc.append(team.getName()).append(new StringTextComponent(":"));
+            ITextComponent tc = new TranslationTextComponent("bongo.cmd.spread.added");
+            tc.appendSibling(team.getName()).appendSibling(new StringTextComponent(":"));
 
             //noinspection ConstantConditions
             world.getServer().getPlayerList().getPlayers().forEach(teamPlayer -> {
                 if (team.hasPlayer(teamPlayer)) {
-                    tc.append(new StringTextComponent(" ")).append(player.getDisplayName());
+                    tc.appendSibling(new StringTextComponent(" ")).appendSibling(player.getDisplayName());
                 }
             });
 
-            player.sendMessage(tc, player.getUniqueID());
+            player.sendMessage(tc);
         }
 
         return 0;

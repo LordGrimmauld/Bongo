@@ -69,7 +69,7 @@ public class Util {
     public static void broadcast(World world, ITextComponent message) {
         MinecraftServer server = world.getServer();
         if (server != null) {
-            server.getPlayerList().getPlayers().forEach(player -> player.sendMessage(message, player.getUniqueID()));
+            server.getPlayerList().getPlayers().forEach(player -> player.sendMessage(message));
         }
     }
 
@@ -79,7 +79,7 @@ public class Util {
         if (server != null) {
             server.getPlayerList().getPlayers().forEach(player -> {
                 if (!uid.equals(player.getGameProfile().getId()))
-                    player.sendMessage(message, player.getUniqueID());
+                    player.sendMessage(message);
             });
         }
     }

@@ -1,18 +1,19 @@
 package io.github.noeppi_noeppi.mods.bongo.command;
 
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import io.github.noeppi_noeppi.mods.bongo.command.arg.GameDefArgument;
 import io.github.noeppi_noeppi.mods.bongo.command.arg.UppercaseEnumArgument;
+import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.item.DyeColor;
-import net.minecraftforge.event.RegisterCommandsEvent;
 
 public class BongoCommands {
 
-    public static void register(RegisterCommandsEvent event) {
-        event.getDispatcher().register(Commands.literal("bp").executes(new BackPackCommand()));
+    public static void register(CommandDispatcher<CommandSource> dispatcher) {
+        dispatcher.register(Commands.literal("bp").executes(new BackPackCommand()));
 
-        event.getDispatcher().register(Commands.literal("bingo").then(
+        dispatcher.register(Commands.literal("bingo").then(
                 Commands.literal("backpack").executes(new BackPackCommand())
         ).then(
                 Commands.literal("join").then(Commands.argument("team", UppercaseEnumArgument.enumArgument(DyeColor.class)).executes(new JoinCommand()))
